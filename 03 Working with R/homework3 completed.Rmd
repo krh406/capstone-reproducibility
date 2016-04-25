@@ -17,34 +17,41 @@ No Rchunk is needed to accomplish this.
 Read in the homework3.csv data. For each of the following steps you
 should preface your R commands with some plain English explanation.
 -->
-
+```{r}
+dat<-read.csv("homework3.csv")
+```
 
 
 <!--
 Check the structure of the data.
 -->
+```{r}
+str(dat)
+```
 
-'data.frame':	100 obs. of  3 variables:
- $ major       : Factor w/ 2 levels "business","psychology": 2 2 2 2 2 2 2 2 2 2 ...
- $ year        : Factor w/ 4 levels "freshman","junior",..: 1 1 1 1 1 1 1 1 1 1 ...
- $ conservatism: num  44.5 38.6 34.2 32.2 42.3 ...
 
 <!--
 Find the mean, median, and standard deviation using the sd() function
 for the overall level of conservatism.
 -->
-
-mean = 52.3
-median = 53.8
-var =390.4
+```{r}
+mean(dat$conservatism)
+median(dat$conservatism)
+var(dat$conservatism)
+```
 
 <!--
 Find the mean level of support for freshmen only.
 -->
 
-mean = 47.5
+```{r}
+mean(dat$conservatism[dat$year=="freshman"])
+```
 
 <!--
 Find the mean level of support for sophomore business students only.
 -->
-49.82
+```{r}
+mean(dat$conservatism[dat$year=="sophomore" & dat$major=="business"])
+```
+
