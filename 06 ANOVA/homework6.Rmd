@@ -16,6 +16,11 @@ X among green Xs and red Os). We're also looking at how the number
 of distractors within the search display effect our data.
 -->
 
+Read in the data as the first step:
+
+```{r}
+dat<-read.csv("homework6.csv")
+```
 
 
 <!--
@@ -23,7 +28,19 @@ Check the structure of the data and change any variables that should
 be factor variables into factor variables
 -->
 
+Checking the structure of the data is the second step:
 
+```{r}
+str(dat)
+```
+
+Some of the variables need to be changed to factor variables. The next step is to fix that:
+
+```{r}
+dat$distractors<-as.factor(dat$distractors)
+dat$subject<-as.factor(dat$subject)
+dat$subject2<-as.factor(dat$subject2)
+```
 
 <!--
 Perform a one-way between-subjects ANOVA examining for effects of 
@@ -32,14 +49,26 @@ Also create a line graph to help you interpret the results of your
 analysis.
 -->
 
+To get only the data from the conjunction searches the following is input:
 
+```{r}
+temp<-dat[dat$type=="conjunction",]
+```
+
+Next the ANOVA is ran:
+
+```{r}
+summary(aov(rt~distractors, data=temp))
+```
 
 <!--
 Perform a one-way within subjects ANOVA on the same data you analyzed
 earlier. Tip: use subject as the subjects variable for this analysis.
 -->
 
-
+```{r}
+summary(aov(rt~distractors+Error(subject/rt),data=temp))
+```
 
 <!--
 Perform a between-subjects ANOVA examining for the effects of and
@@ -47,12 +76,27 @@ interactions between the number of distractors and the search type.
 Make sure to interpret your results.
 -->
 
+```{r}
+summary(aov(rt~distractors*type, data=dat))
+```
+
 <!--
 Create a line graph and a grouped bar graph to help us interpret
 the results of the previous analyses. Include error bars in your
 figures.
 -->
 
+```{r}
+library(ggplot2)
+library(gplots)
+library(dplyr)
+
+temp<-dat%>%group_by(rt,type)%>%
++     summarize(means=mean(distractors),
++               sems=sd(distractors)/sqrt(length(n)))
+
+
+```
 <!--
 Interpret the statistical results in light of the figures.
 -->
@@ -66,6 +110,11 @@ Interpret the results of the analysis based on the statistical
 results and your earlier figures.
 -->
 
+```{r}
+summary(aov(distractors~rt*type+
+              Error(subject/(rt*type)),
+                    data=dat))
+```
 
 
 <!--
@@ -74,3 +123,8 @@ number of distractors varies within subjects and the type of search
 varies between subjects. Make sure to interpret your results. Tip:
 use subject2 as your subject's variable for this analysis.
 -->
+```{r}
+summary(aov(distractors~rt*type+
+              Error(subject2/type),
+            data=dat))
+```

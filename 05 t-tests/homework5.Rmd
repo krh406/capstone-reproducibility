@@ -70,7 +70,7 @@ library(dplyr)
 ```
 
 ```{r}
-f<-ggplot(aes(x=factor(music),y=means))+
+f<-ggplot(temp,aes(x=factor(music),y=means))+
   geom_bar(stat="identity", color="black",
            fill=c("deepskyblue2", "deeppink"))+
   geom_errorbar(aes(ymax=means+sems,
